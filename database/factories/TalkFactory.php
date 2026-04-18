@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\Talk;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\User;
 use App\Enums\TalkType;
+use App\Models\Talk;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<Talk>
