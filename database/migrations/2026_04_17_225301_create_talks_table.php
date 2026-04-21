@@ -12,10 +12,10 @@ return new class extends Migration
         Schema::create('talks', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('length');
+            $table->string('length')->nullable();
             $table->string('type');
-            $table->text('abstract');
-            $table->text('organizer_notes');
+            $table->text('abstract')->nullable();
+            $table->text('organizer_notes')->nullable();
             $table->foreignIdFor(User::class);
             $table->timestamps();
         });

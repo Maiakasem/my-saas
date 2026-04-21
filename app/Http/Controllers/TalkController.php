@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Talk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TalkController extends Controller
 {
@@ -12,7 +13,9 @@ class TalkController extends Controller
      */
     public function index()
     {
-        //
+        return view('talks.index', [
+            'talks' => Auth::user()->talks,
+        ]);
     }
 
     /**
@@ -20,7 +23,7 @@ class TalkController extends Controller
      */
     public function create()
     {
-        //
+        return view('talks.create');
     }
 
     /**
@@ -28,7 +31,19 @@ class TalkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'length' => 'required|string|max:255',
+            'type' => 'required|in:lightting,standrad,keynote',
+            'abstract' => 'required|string',
+            'organizer_notes' => 'nullable|string',
+        ]);
+
+        $validated['user_id'] = auth()->id();
+
+        Talk::create($validated);
+
+        return redirect()->route('talks.index')->with('success', 'Talk created successfully.');
     }
 
     /**
@@ -44,7 +59,9 @@ class TalkController extends Controller
      */
     public function edit(Talk $talk)
     {
-        //
+        return view('talks.edit', [
+            'talk' => $talk,
+        ]);
     }
 
     /**
@@ -52,7 +69,17 @@ class TalkController extends Controller
      */
     public function update(Request $request, Talk $talk)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'length' => 'required|string|max:255',
+            'type' => 'required|in:lightting,standrad,keynote',
+            'abstract' => 'required|string',
+            'organizer_notes' => 'nullable|string',
+        ]);
+
+        $talk->update($validated);
+
+        return redirect()->route('talks.index')->with('success', 'Talk updated successfully.');
     }
 
     /**
@@ -60,6 +87,8 @@ class TalkController extends Controller
      */
     public function destroy(Talk $talk)
     {
-        //
+        $talk->delete();
+
+        return redirect()->route('talks.index')->with('success', 'Talk deleted successfully.');
     }
 }
